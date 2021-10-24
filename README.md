@@ -1,6 +1,6 @@
 # Cosmos node tool scripts
 
-## Usadge
+## Usage
 1. Copy file **cos_var_template.sh** and rename to **cos_var.sh**
 2. Insert your's node parameters in **cos_var.sh**
 3. Change scripts permissions: 
@@ -11,4 +11,8 @@ chmod +x *.sh
 ```
 echo export PATH='$PATH':$PWD >> $HOME/.bash_profile && . $HOME/.bash_profile
 ```
-5. Scripts ready to use
+5. Install some utils
+```
+sudo apt update && sudo apt install curl -y
+```
+6. Scripts ready to use
