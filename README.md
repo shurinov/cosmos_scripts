@@ -22,6 +22,6 @@ echo export PATH='$PATH':$PWD >> $HOME/.bash_profile && . $HOME/.bash_profile
 ```
 5. Install some utils
 ```
-sudo apt update && sudo apt install curl -y
+sudo apt update && sudo apt install curl jq -y
 ```
 6. Scripts ready to use
