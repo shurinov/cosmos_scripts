@@ -4,7 +4,7 @@
 1. Copy file **cos_var_template.sh** and rename to **cos_var.sh**
 ```
 cd cosmos_scripts
-cp cos_var_template.sh cos_var.sh
+cp template_cos_var.sh cos_var.sh
 ```
 2. Insert your's node parameters in **cos_var.sh**
 ```
@@ -20,8 +20,12 @@ chmod +x *.sh
 ```
 echo export PATH='$PATH':$PWD >> $HOME/.bash_profile && . $HOME/.bash_profile
 ```
-5. Install some utils
+5. Add to bash_profile load your COS_** variables to enviromet if it's need
+```
+echo . $PWD/cos_var.sh >> $HOME/.bash_profile && . $HOME/.bash_profile
+```
+6. Install some utils
 ```
 sudo apt update && sudo apt install curl jq -y
 ```
-6. Scripts ready to use
+7. Scripts ready to use

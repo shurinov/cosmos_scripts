@@ -3,6 +3,7 @@
 # Common variables:
 export COS_BIN_NAME=chain_daemon_binary_name    # for example: umeed, evmosd, etc
 export COS_CHAIN_ID=chain_id_name               # for example: umeevengers-1, evmos_9000-1, etc
+export COS_DENOM=token_denom_name              # for example: uumee
 
 # Node info:
 export COS_MONIKER=my_node_name         # change my_node_name to actual node moniker
