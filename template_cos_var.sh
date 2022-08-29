@@ -1,15 +1,16 @@
 #!/bin/bash
 
 # Common variables:
-export COS_BIN_NAME=chain_daemon_binary_name    # for example: umeed, evmosd, etc
-export COS_CHAIN_ID=chain_id_name               # for example: umeevengers-1, evmos_9000-1, etc
-export COS_DENOM=token_denom_name              # for example: uumee
+export COS_BIN_NAME=       # chain daemon binary name, for example: umeed, evmosd, etc
+export COS_HOME_PATH=      # path to dir with config and data, for example: /home/user/.umee
+export COS_CHAIN_ID=       # chain id name, for example: umeevengers-1, evmos_9000-1, etc
+export COS_DENOM=          # token denom name, for example: uumee
 
 # Node info:
-export COS_MONIKER=my_node_name         # change my_node_name to actual node moniker
-export COS_WALLET=my_wallet             # change my_wallet to actual wallet name
-export COS_WALADDR=cosmosXX***X         # change to actual wallet adress in used chain format
-export COS_VALOPER=cosmosvaloperXX***X  # change to actual valoper adress in used chain format
+export COS_MONIKER=    # paste actual node moniker
+export COS_WALLET=     # paste actual wallet name
+export COS_WALADDR=    # paste actual wallet adress in used chain format
+export COS_VALOPER=    # paste actual valoper adress in used chain format
 
 # Ports variables (default values, change if needs):
 # From config/config.toml

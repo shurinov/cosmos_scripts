@@ -9,13 +9,6 @@ ST="\033[0m"
 
 source ./cos_var.sh
 
-# if [ "$1" == "-h" ]
-# then 
-  # echo "HELP"
-# fi
-
-echo -e "\n"
-
 case "$1" in
   -h|-help|help) echo -e "Usage: cos_snap_start.sh SNAP_RPC PEERS\n\
   SNAP_RPC - node_ip:rpc_port\n\
@@ -29,32 +22,42 @@ LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
 BLOCK_HEIGHT=$((LATEST_HEIGHT - 3000)); \
 TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
 
-# check (you should see 2 block height and block hash)
-echo -e "From RPC: ${GREEN}$LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH${ST}"
+echo -e "RPC: ${GREEN}$SNAP_RPC${ST}"
+# check RPC response
+if [ -z "$LATEST_HEIGHT$TRUST_HASH" ];  
+then 
+  echo -e "${RED}No response from RPC. Exit${ST}"
+  exit 0
+fi
+echo -e "latest height: ${GREEN}$LATEST_HEIGHT${ST}\n\
+use block height: ${GREEN}$BLOCK_HEIGHT${ST}, with hash: ${GREEN}$TRUST_HASH${ST}"
 
 # backup configuration file
+echo -e "\nBackup ${COS_HOME_PATH}/config/config.toml"
 cp ${COS_HOME_PATH}/config/config.toml ${COS_HOME_PATH}/config/$(date +"%F-%H:%M:%S")-bak-config.toml
 
 if [ -n "$PEERS" ];
 then 
   # apply PEERS
+  echo -e "Update persistent_peers"
   sed -i -e "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" ${COS_HOME_PATH}/config/config.toml
 else
   echo "Param PEERS is null. Peers didn't changed"
 fi
 
 # apply sync state
+echo -e "Update state statesync"
 sed -i -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
 s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
 s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
 s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"| ; \
 s|^(seeds[[:space:]]+=[[:space:]]+).*$|\1\"\"|" ${COS_HOME_PATH}/config/config.toml
 
-echo "${COS_HOME_PATH}/config/config.toml updated"
-
+# print help for next steps
 echo -e "\nFor start with new state:\n\
 ${YELLOW}sudo systemctl stop {service_name}\n\
 ${COS_BIN_NAME} tendermint unsafe-reset-all --home ${COS_HOME_PATH}\n\
-sudo systemctl start {service_name}${ST}"
+sudo systemctl start {service_name}\n\
+journalctl -u {service_name} -f${ST}\n"
 
 popd > /dev/null || exit 1
