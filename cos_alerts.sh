@@ -12,7 +12,7 @@ fi
 }
 
 alert=0
-#status=$(curl -s ${COS_NODE_URL}:$COS_PORT_RPC/status)
+status=$(curl -s ${COS_NODE_URL}:$COS_PORT_RPC/status)
 
 if [ -z "$status" ];
 then
