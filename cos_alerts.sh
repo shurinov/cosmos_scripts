@@ -20,6 +20,7 @@ then
     out="Alert! can't connect to node RPC: ${COS_NODE_URL}:$COS_PORT_RPC"
     msg_add "$out"
 else
+    block_height=$(jq -r '.result.sync_info.latest_block_height' <<<$status)
     # get latest block time
     latest_block_time=$(jq -r '.result.sync_info.latest_block_time' <<<$status)
     let "time_since_block = $(date +"%s") - $(date -d "$latest_block_time" +"%s")"
@@ -56,7 +57,8 @@ else
         msg_add "$out"
     fi
     
-    info=$(echo -e "latest_block_time: ${latest_block_time}
+    info=$(echo -e "latest_block_height: ${block_height}
+latest_block_time: ${latest_block_time}
 time_since_block: ${time_since_block} sec
 voting_power: ${voting_power}
 peers_number: ${peers_num}
@@ -81,7 +83,8 @@ then
         echo -e $msg
         echo -e $info        
         echo "$(date +"%s")" > cos_alerts_timestamp
-        ./scripts_stuff/tgbot_send_msg.sh "${ALERT_MSG_TITLE}" "${msg}" " " "${info}"
+        
+        ./scripts_stuff/tgbot_send_msg.sh "${ALERT_MSG_TITLE}" " " "${msg}" " " "${info}" "" "Notification timeout: ${ALERT_NOTIFY_PER_MIN} min"
     fi
 else
     echo "Alert timeout ($alerts_notify_period sec) isn't over"
