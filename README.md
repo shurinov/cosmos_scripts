@@ -1,6 +1,6 @@
 # Cosmos node tool scripts
 
-## Usage
+## Basic Usage
 1. Copy file **cos_var_template.sh** and rename to **cos_var.sh**
 ```
 cd cosmos_scripts
@@ -29,3 +29,17 @@ echo . $PWD/cos_var.sh >> $HOME/.bash_profile && . $HOME/.bash_profile
 sudo apt update && sudo apt install curl jq -y
 ```
 7. Scripts ready to use
+
+
+## Setup Alerts
+
+Edit Alerts variables if it need
+```
+nano cos_var.sh
+```
+
+Setup cron for run alert each 1 minute
+```
+crontab -e
+*/1 * * * * /path/to/cos_alerts.sh
+```
