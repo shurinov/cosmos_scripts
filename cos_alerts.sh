@@ -17,6 +17,7 @@ if [ -z "${ALERT_NOT_VALIDATOR}" ]; then ALERT_NOT_VALIDATOR=0; fi
 if [ -z "${ALERT_NOTIFY_PER_MIN}" ]; then ALERT_NOTIFY_PER_MIN=1; fi
 if [ -z "${ALERT_LEVEL_TIME_SINCE_BLOCK}" ]; then ALERT_LEVEL_TIME_SINCE_BLOCK=30; fi
 if [ -z "${ALERT_LEVEL_MISSED_BLOCK}" ]; then ALERT_LEVEL_MISSED_BLOCK=30; fi
+if [ -z "${ALERT_TEST}" ]; then ALERT_TEST=0; fi
 
 
 if [ ${ALERT_TEST} -ne 1 ] 
