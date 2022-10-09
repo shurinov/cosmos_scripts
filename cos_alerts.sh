@@ -11,9 +11,20 @@ else
 fi
 }
 
-alert=0
-status=$(curl -s ${COS_NODE_URL}:$COS_PORT_RPC/status)
+# assign default alert parameters
+if [ -z "${ALERT_MSG_TITLE}" ]; then ALERT_MSG_TITLE="COSMOS ALERT SCRIPT"; fi
+if [ -z "${ALERT_NOT_VALIDATOR}" ]; then ALERT_NOT_VALIDATOR=0; fi
+if [ -z "${ALERT_NOTIFY_PER_MIN}" ]; then ALERT_NOTIFY_PER_MIN=1; fi
+if [ -z "${ALERT_LEVEL_TIME_SINCE_BLOCK}" ]; then ALERT_LEVEL_TIME_SINCE_BLOCK=30; fi
+if [ -z "${ALERT_LEVEL_MISSED_BLOCK}" ]; then ALERT_LEVEL_MISSED_BLOCK=30; fi
 
+
+if [ ${ALERT_TEST} -ne 1 ] 
+then
+    status=$(curl -s ${COS_NODE_URL}:$COS_PORT_RPC/status)
+fi
+
+alert=0
 if [ -z "$status" ];
 then
     alert=1
@@ -32,21 +43,24 @@ else
     if [ $time_since_block -ge ${ALERT_LEVEL_TIME_SINCE_BLOCK} ];
     then
         alert=1
-        out="Alert! time_since_block"
+        out="Alert! time_since_block (limit: ${ALERT_LEVEL_TIME_SINCE_BLOCK})"
         msg_add "$out"
     fi
     
-    if [ ${voting_power} -le 0 ];
+    if [ ${ALERT_NOT_VALIDATOR} -ne 1 ] 
     then
-        alert=1
-        out="Alert! VP"
-        msg_add "$out"
+        if [ ${voting_power} -le 0 ];
+        then
+            alert=1
+            out="Alert! VP"
+            msg_add "$out"
+        fi
     fi
     
     if [ ${missed_blocks} -ge ${ALERT_LEVEL_MISSED_BLOCK} ];
     then
         alert=1
-        out="Alert! max_missed_blocks"
+        out="Alert! max_missed_blocks (limit: ${ALERT_LEVEL_MISSED_BLOCK})"
         msg_add "$out"
     fi
     
@@ -64,6 +78,8 @@ voting_power: ${voting_power}
 peers_number: ${peers_num}
 missed_blocks: ${missed_blocks}")
 fi
+
+
 
 # convert notify period to sec
 let "alerts_notify_period = ${ALERT_NOTIFY_PER_MIN}*60"
@@ -84,17 +100,13 @@ then
         echo -e $info        
         echo "$(date +"%s")" > cos_alerts_timestamp
         
-        ./scripts_stuff/tgbot_send_msg.sh "${ALERT_MSG_TITLE}" " " "${msg}" " " "${info}" "" "Notification timeout: ${ALERT_NOTIFY_PER_MIN} min"
+        if [ ${ALERT_TEST} -eq 1 ]; then test_msg="TEST MODE ON"; fi
+        
+        ./scripts_stuff/tgbot_send_msg.sh "${ALERT_MSG_TITLE}" " " "${msg}" " " "${info}" "" "Notification timeout: ${ALERT_NOTIFY_PER_MIN} min" "${test_msg}"
     fi
 else
     echo "Alert timeout ($alerts_notify_period sec) isn't over"
 fi
 
 popd > /dev/null || exit 1
-
-
-
-
-
-
 

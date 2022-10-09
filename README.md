@@ -37,6 +37,12 @@ Edit Alerts variables if it need
 ```
 nano cos_var.sh
 ```
+Copy tg bot template and insert Bot token and chat id
+```
+cd scripts_stuff
+cp template_tgbot_vars.sh tgbot_vars.sh
+nano tgbot_vars.sh
+```
 
 Setup cron for run alert each 1 minute
 ```
