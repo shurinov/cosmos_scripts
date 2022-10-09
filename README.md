@@ -1,5 +1,15 @@
 # Cosmos node tool scripts
 
+Clone repository (with submodules)
+```
+git clone --recurse-submodules https://github.com/shurinov/cosmos_scripts.git
+```
+or if you already cloned the project 
+```
+git submodule init
+git submodule update
+```
+
 ## Basic Usage
 1. Copy file **cos_var_template.sh** and rename to **cos_var.sh**
 ```
