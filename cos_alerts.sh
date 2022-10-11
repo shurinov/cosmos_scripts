@@ -56,15 +56,15 @@ else
             out="Alert! VP"
             msg_add "$out"
         fi
+        
+        if [ ${missed_blocks} -ge ${ALERT_LEVEL_MISSED_BLOCK} ];
+        then
+            alert=1
+            out="Alert! max_missed_blocks (limit: ${ALERT_LEVEL_MISSED_BLOCK})"
+            msg_add "$out"
+        fi
     fi
-    
-    if [ ${missed_blocks} -ge ${ALERT_LEVEL_MISSED_BLOCK} ];
-    then
-        alert=1
-        out="Alert! max_missed_blocks (limit: ${ALERT_LEVEL_MISSED_BLOCK})"
-        msg_add "$out"
-    fi
-    
+   
     if [ ${peers_num} -eq 0 ];
     then
         alert=1
