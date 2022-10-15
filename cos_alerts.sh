@@ -20,6 +20,12 @@ if [ -z "${ALERT_LEVEL_MISSED_BLOCK}" ]; then ALERT_LEVEL_MISSED_BLOCK=30; fi
 if [ -z "${ALERT_TEST}" ]; then ALERT_TEST=0; fi
 
 
+# read missed block value file to array
+readarray -t arr <cos_alerts_miss_blocks
+missed_prev=${arr[0]}
+if [ -z "${missed_prev}" ]; then missed_prev=0; fi
+let "missed_level = ${missed_prev} + ${ALERT_LEVEL_MISSED_BLOCK}"
+
 if [ ${ALERT_TEST} -ne 1 ] 
 then
     status=$(curl -s ${COS_NODE_URL}:$COS_PORT_RPC/status)
@@ -57,12 +63,14 @@ else
             msg_add "$out"
         fi
         
-        if [ ${missed_blocks} -ge ${ALERT_LEVEL_MISSED_BLOCK} ];
+        if [ ${missed_blocks} -gt ${missed_level} ];
         then
             alert=1
-            out="Alert! max_missed_blocks (limit: ${ALERT_LEVEL_MISSED_BLOCK})"
+            out="Alert! max_missed_blocks ${missed_prev} > ${missed_blocks} (limit: +${ALERT_LEVEL_MISSED_BLOCK})"
             msg_add "$out"
         fi
+        # save current missed blocks 
+        echo "${missed_blocks}" > cos_alerts_miss_blocks
     fi
    
     if [ ${peers_num} -eq 0 ];
@@ -96,11 +104,11 @@ echo "Time since lastest alert: $time_since_alert s"
 
 if [ ${time_since_alert} -ge ${alerts_notify_period} ];
 then
+    echo -e $info
     if [ $alert -eq 1 ];
     then    
         echo "SEND ALERT!"
-        echo -e $msg
-        echo -e $info        
+        echo -e $msg        
         echo "$(date +"%s")" > cos_alerts_timestamp
         host_ip=$(curl -s --connect-timeout 2 ifconfig.me)
         title="${ALERT_MSG_TITLE} | ${host_ip}"
