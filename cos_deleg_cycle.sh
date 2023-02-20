@@ -16,7 +16,7 @@ echo -e "${wal_password}\n" | ${COS_BIN_NAME} tx distribution withdraw-all-rewar
   --from ${wal_name} \
   --chain-id ${COS_CHAIN_ID} \
   --fees=${fees}${COS_DENOM} \
-  --node "tcp://127.0.0.1:${COS_PORT_RPC}" \
+  --node "tcp://${COS_NODE_URL}:${COS_PORT_RPC}" \
   --output json \
   --yes
 
@@ -28,13 +28,13 @@ echo -e "${wal_password}\n" | ${COS_BIN_NAME} tx distribution withdraw-all-rewar
   # --from ${COS_WALLET} \
   # --fees=${fees}${COS_DENOM} \
   # --chain-id ${COS_CHAIN_ID} \
-  # --node "tcp://127.0.0.1:${COS_PORT_RPC}" \
+  # --node "tcp://${COS_NODE_URL}:${COS_PORT_RPC}" \
   # --output json \
   # --yes
 
 sleep 15s
 
-balance=$(${COS_BIN_NAME} q bank balances ${COS_WALADDR} --output json --node "tcp://127.0.0.1:${COS_PORT_RPC}" | jq  '.balances[] | select(.denom=="'${COS_DENOM}'") | .amount | tonumber')
+balance=$(${COS_BIN_NAME} q bank balances ${COS_WALADDR} --output json --node "tcp://${COS_NODE_URL}:${COS_PORT_RPC}" | jq  '.balances[] | select(.denom=="'${COS_DENOM}'") | .amount | tonumber')
 
 to_delegation=$(( $balance-$wal_res ))
 
@@ -46,7 +46,7 @@ if [[ $to_delegation -gt 0 ]]; then
   --from ${wal_name} \
   --chain-id ${COS_CHAIN_ID} \
   --fees=${fees}${COS_DENOM} \
-  --node "tcp://127.0.0.1:${COS_PORT_RPC}" \
+  --node "tcp://${COS_NODE_URL}:${COS_PORT_RPC}" \
   --output json \
   --yes
 else

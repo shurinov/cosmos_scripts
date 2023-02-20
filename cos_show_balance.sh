@@ -37,5 +37,5 @@ echo -e "Address:${GREEN}${wal_address}${ST}"
 
 ${COS_BIN_NAME} query bank balances ${wal_address} \
   --chain-id=${COS_CHAIN_ID} \
-	--node "tcp://127.0.0.1:${COS_PORT_RPC}"
+	--node "tcp://${COS_NODE_URL}:${COS_PORT_RPC}"
 popd > /dev/null || exit 1

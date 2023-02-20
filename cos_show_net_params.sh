@@ -8,7 +8,7 @@ YELLOW="\033[33m"
 ST="\033[0m"
 
 echo -e "${YELLOW}Staking:${ST}"
-${COS_BIN_NAME} q staking params
+${COS_BIN_NAME} q staking params --node "tcp://${COS_NODE_URL}:${COS_PORT_RPC}"
 echo -e "\n${YELLOW}Slashing:${ST}"
-${COS_BIN_NAME} q slashing params
+${COS_BIN_NAME} q slashing params --node "tcp://${COS_NODE_URL}:${COS_PORT_RPC}"
 popd > /dev/null || exit 1
