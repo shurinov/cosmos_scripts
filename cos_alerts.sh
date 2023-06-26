@@ -28,7 +28,7 @@ let "missed_level = ${missed_prev} + ${ALERT_LEVEL_MISSED_BLOCK}"
 
 if [ ${ALERT_TEST} -ne 1 ] 
 then
-    status=$(curl -s ${COS_NODE_URL}:$COS_PORT_RPC/status)
+    status=$(curl -s ${COS_NODE_URL}:${COS_PORT_RPC}/status)
 fi
 
 alert=0
@@ -80,7 +80,8 @@ else
         msg_add "$out"
     fi
     
-    info=$(echo -e "latest_block_height: ${block_height}
+    info=$(echo -e "target_rpc: ${COS_NODE_URL}:${COS_PORT_RPC}
+latest_block_height: ${block_height}
 latest_block_time: ${latest_block_time}
 time_since_block: ${time_since_block} sec
 voting_power: ${voting_power}
