@@ -11,6 +11,7 @@ export COS_MONIKER=    # paste actual node moniker
 export COS_WALLET=     # paste actual wallet name
 export COS_WALADDR=    # paste actual wallet adress in used chain format
 export COS_VALOPER=    # paste actual valoper adress in used chain format
+export COS_KYVE_STAKER_ADDR=
 
 # Node url:
 COS_NODE_URL=localhost

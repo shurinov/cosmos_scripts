@@ -31,6 +31,7 @@ then
     status=$(curl -s ${COS_NODE_URL}:${COS_PORT_RPC}/status)
 fi
 
+
 alert=0
 if [ -z "$status" ];
 then
@@ -89,6 +90,25 @@ peers_number: ${peers_num}
 missed_blocks: ${missed_blocks}")
 fi
 
+
+kyve_staker_pools=$(curl -s http://${COS_NODE_URL}:${COS_PORT_API}/kyve/query/v1beta1/staker/${COS_KYVE_STAKER_ADDR} | jq '.staker.pools[]') 
+kyve_staker_points=$(jq -r '.points | tonumber' <<<${kyve_staker_pools})
+
+if [ -z "$kyve_staker_points" ];
+then
+  alert=1
+  out="Alert! KYVE no staker pools";
+  msg_add "$out"
+else
+  if [ $kyve_staker_points -ne 0 ];
+  then 
+    alert=1
+    out="Alert! KYVE points: ${kyve_staker_points}";
+    msg_add "$out"
+    msg_add "${kyve_staker_pools}"
+    echo "$msg"
+  fi
+fi
 
 
 # convert notify period to sec
