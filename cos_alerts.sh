@@ -111,7 +111,7 @@ then
         echo "SEND ALERT!"
         echo -e $msg        
         echo "$(date +"%s")" > cos_alerts_timestamp
-        host_ip=$(curl -s --connect-timeout 2 ifconfig.me)
+        host_ip=$(curl -s -4 --connect-timeout 2 ifconfig.me)
         title="${ALERT_MSG_TITLE} | ${host_ip}"
         
         if [ ${ALERT_TEST} -eq 1 ]; then test_msg="TEST MODE ON"; fi
