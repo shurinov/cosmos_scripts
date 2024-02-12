@@ -57,5 +57,5 @@ nano tgbot_vars.sh
 Setup cron for run alert each 1 minute
 ```
 crontab -e
-*/1 * * * * /path/to/cos_alerts.sh
+*/1 * * * * $HOME/scripts/cos_alerts.sh
 ```
