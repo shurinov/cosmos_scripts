@@ -46,6 +46,8 @@ else
 fi
 time_since_block="${time_since_block} sec ago"
 
+vp=$(jq -r '.result.validator_info.voting_power' <<<$status)
+
 # Output
 echo -e ""
 echo -e "${PURPLE}INFO:${ST}"
@@ -59,6 +61,8 @@ echo -e ""
 echo -e "Latest block    $time_since_block"
 echo -e "-height:        $block_height"
 echo -e "-time:          $latest_block_time"
+echo -e ""
+echo -e "Node VP:        ${YELLOW}$vp${ST}"
 
 # echo -e "Block latest:      $block_height"
 # echo -e "Block latest time: $latest_block_time"
