@@ -91,23 +91,36 @@ missed_blocks: ${missed_blocks}")
 fi
 
 
-kyve_staker_pools=$(curl -s http://${COS_NODE_URL}:${COS_PORT_API}/kyve/query/v1beta1/staker/${COS_KYVE_STAKER_ADDR} | jq '.staker.pools[]') 
-kyve_staker_points=$(jq -r '.points | tonumber' <<<${kyve_staker_pools})
+# KYVE staker pools monitor
+kyve_pool_data="initvalue"
+i=0
+while [ "$kyve_pool_data" != "null" ]
+do
+  kyve_pool_data=$(curl -s http://${COS_NODE_URL}:${COS_PORT_API}/kyve/query/v1beta1/staker/${COS_KYVE_STAKER_ADDR} | \
+ jq -r --arg jq_var_i $i '.staker.pools[$jq_var_i | tonumber]')
+
+  if [ "$kyve_pool_data" != "null" ]
+  then
+    kyve_staker_points=$(jq -r '.points | tonumber' <<<${kyve_pool_data})
+    #echo $kyve_staker_points
+    if [ $kyve_staker_points -ne 0 ];
+    then 
+      alert=1
+      out="Alert! KYVE points: ${kyve_staker_points}";
+      msg_add "$out"
+      msg_add "${kyve_staker_pools}"
+      echo "$msg"
+    fi
+  fi
+    
+  i=$(expr $i + 1)
+done 
 
 if [ -z "$kyve_staker_points" ];
 then
   alert=1
   out="Alert! KYVE no staker pools";
   msg_add "$out"
-else
-  if [ $kyve_staker_points -ne 0 ];
-  then 
-    alert=1
-    out="Alert! KYVE points: ${kyve_staker_points}";
-    msg_add "$out"
-    msg_add "${kyve_staker_pools}"
-    echo "$msg"
-  fi
 fi
 
 
@@ -131,7 +144,7 @@ then
         echo "SEND ALERT!"
         echo -e $msg        
         echo "$(date +"%s")" > cos_alerts_timestamp
-        host_ip=$(curl -s --connect-timeout 2 ifconfig.me)
+        host_ip=$(curl -s -4 --connect-timeout 2 ifconfig.me)
         title="${ALERT_MSG_TITLE} | ${host_ip}"
         
         if [ ${ALERT_TEST} -eq 1 ]; then test_msg="TEST MODE ON"; fi
