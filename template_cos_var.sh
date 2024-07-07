@@ -13,7 +13,7 @@ export COS_WALADDR=    # paste actual wallet adress in used chain format
 export COS_VALOPER=    # paste actual valoper adress in used chain format
 
 # Node url:
-COS_NODE_URL=localhost
+export COS_NODE_URL=localhost
 
 # Ports variables (default values, change if needs):
 # From config/config.toml
