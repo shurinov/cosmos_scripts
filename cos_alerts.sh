@@ -113,10 +113,11 @@ then
         echo "$(date +"%s")" > cos_alerts_timestamp
         host_ip=$(curl -s -4 --connect-timeout 2 ifconfig.me)
         title="${ALERT_MSG_TITLE} | ${host_ip}"
+        if [ -n "$ALERT_MSG_TAG" ]; then TAG2MSG="#${ALERT_MSG_TAG}"; fi
         
         if [ ${ALERT_TEST} -eq 1 ]; then test_msg="TEST MODE ON"; fi
         
-        ./scripts_stuff/tgbot_send_msg.sh "${title}" " " "${msg}" " " "${info}" "" "Notification timeout: ${ALERT_NOTIFY_PER_MIN} min" "${test_msg}"
+        ./scripts_stuff/tgbot_send_msg.sh "${title}" " " "${msg}" " " "${info}" "" "Notification timeout: ${ALERT_NOTIFY_PER_MIN} min" "${test_msg}" "${TAG2MSG}"
     fi
 else
     echo "Alert timeout ($alerts_notify_period sec) isn't over"
