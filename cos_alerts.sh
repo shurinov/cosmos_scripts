@@ -145,7 +145,8 @@ then
         echo -e $msg        
         echo "$(date +"%s")" > cos_alerts_timestamp
         host_ip=$(curl -s -4 --connect-timeout 2 ifconfig.me)
-        title="${ALERT_MSG_TITLE} | ${host_ip}"
+        if [ -n "$ALERT_MSG_TAG" ]; then TAG2MSG="#${ALERT_MSG_TAG}"; fi
+        title="${ALERT_MSG_TITLE} | ${TAG2MSG} | ${host_ip}"
         
         if [ ${ALERT_TEST} -eq 1 ]; then test_msg="TEST MODE ON"; fi
         
