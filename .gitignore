@@ -1,3 +1,4 @@
 # ignore local variables file
 cos_var.sh
 cos_alerts_timestamp
+cos_alerts_miss_blocks

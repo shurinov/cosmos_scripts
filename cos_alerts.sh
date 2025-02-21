@@ -102,11 +102,12 @@ do
   if [ "$kyve_pool_data" != "null" ]
   then
     kyve_staker_points=$(jq -r '.points | tonumber' <<<${kyve_pool_data})
+    kyve_staker_pool_name=$(jq -r '.pool.name' <<<${kyve_pool_data})
     #echo $kyve_staker_points
-    if [ $kyve_staker_points -ne 0 ];
+    if [ $kyve_staker_points -ge ${ALERT_LEVEL_POOL_POINTS} ];
     then 
       alert=1
-      out="Alert! KYVE points: ${kyve_staker_points}";
+      out="Alert! KYVE points: ${kyve_staker_points}  (${kyve_staker_pool_name})";
       msg_add "$out"
       msg_add "${kyve_staker_pools}"
       echo "$msg"
