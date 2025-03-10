@@ -98,6 +98,16 @@ while [ "$kyve_pool_data" != "null" ]
 do
   kyve_pool_data=$(curl -s http://${COS_NODE_URL}:${COS_PORT_API}/kyve/query/v1beta1/staker/${COS_KYVE_STAKER_ADDR} | \
  jq -r --arg jq_var_i $i '.staker.pools[$jq_var_i | tonumber]')
+   echo $kyve_pool_data
+   
+  if [ -z "$kyve_pool_data" ]
+  then
+    alert=1
+    out="Alert! No response from KYVE API"
+    msg_add "$out"
+    echo "$msg"
+    break;
+  fi
 
   if [ "$kyve_pool_data" != "null" ]
   then
